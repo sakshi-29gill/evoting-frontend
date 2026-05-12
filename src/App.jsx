@@ -1,7 +1,7 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import "./App.css";
 
-const API = "https://evoting-backend-production-dd0f.up.railway.app/api";
+const API = "https://evoting-backend.onrender.com/api";
 const AuthContext = createContext(null);
 function useAuth() { return useContext(AuthContext); }
 
