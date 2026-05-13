@@ -1,7 +1,7 @@
 import { useState, useEffect, createContext, useContext } from "react";
 import "./App.css";
 
-const API =  "https://evoting-backend-ufb7.onrender.com/api";
+const API = "https://evoting-backend-ufb7.onrender.com/api";
 const AuthContext = createContext(null);
 function useAuth() { return useContext(AuthContext); }
 
@@ -26,7 +26,6 @@ const Icon = {
   search: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
 };
 
-// ── LANDING PAGE ──────────────────────────────────────────────────────────────
 function Landing({ onNavigate }) {
   return (
     <div className="landing">
@@ -43,8 +42,8 @@ function Landing({ onNavigate }) {
         <h1 className="hero-title">The Future of<br/><span className="gradient-text">Democratic Voting</span></h1>
         <p className="hero-sub">Tamper-proof elections powered by blockchain technology and military-grade MFA. Every vote cryptographically secured and publicly verifiable.</p>
         <div className="hero-cta">
-          <button onClick={() => onNavigate("register")} className="btn btn-primary btn-lg">{Icon.vote} Cast Your Vote</button>
-          <button onClick={() => onNavigate("login")} className="btn btn-outline btn-lg">Sign In →</button>
+          <button onClick={() => onNavigate("register")} className="btn btn-primary btn-lg">Cast Your Vote</button>
+          <button onClick={() => onNavigate("login")} className="btn btn-outline btn-lg">Sign In</button>
         </div>
         <div className="feature-cards">
           {[
@@ -64,7 +63,6 @@ function Landing({ onNavigate }) {
   );
 }
 
-// ── REGISTER PAGE ─────────────────────────────────────────────────────────────
 function Register({ onNavigate }) {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ name: "", email: "", password: "", voterId: "" });
@@ -108,47 +106,24 @@ function Register({ onNavigate }) {
         {msg.text && <div className={`alert alert-${msg.type}`}>{msg.text}</div>}
         {step === 1 ? (
           <form onSubmit={handleRegister} className="auth-form">
-            <div className="form-group">
-              <label>Full Name</label>
-              <input placeholder="Your full name" value={form.name} onChange={e => setForm({...form, name: e.target.value})} required />
-            </div>
-            <div className="form-group">
-              <label>Email Address</label>
-              <input type="email" placeholder="your@email.com" value={form.email} onChange={e => setForm({...form, email: e.target.value})} required />
-            </div>
-            <div className="form-group">
-              <label>Voter ID</label>
-              <input placeholder="e.g. VTR-2024-001" value={form.voterId} onChange={e => setForm({...form, voterId: e.target.value})} required />
-            </div>
-            <div className="form-group">
-              <label>Password</label>
-              <input type="password" placeholder="Min 8 characters" value={form.password} onChange={e => setForm({...form, password: e.target.value})} required minLength={8} />
-            </div>
-            <button type="submit" className="btn btn-primary btn-full" disabled={loading}>
-              {loading ? "Creating Account..." : "Register →"}
-            </button>
+            <div className="form-group"><label>Full Name</label><input placeholder="Your full name" value={form.name} onChange={e => setForm({...form, name: e.target.value})} required /></div>
+            <div className="form-group"><label>Email Address</label><input type="email" placeholder="your@email.com" value={form.email} onChange={e => setForm({...form, email: e.target.value})} required /></div>
+            <div className="form-group"><label>Voter ID</label><input placeholder="e.g. VTR-2024-001" value={form.voterId} onChange={e => setForm({...form, voterId: e.target.value})} required /></div>
+            <div className="form-group"><label>Password</label><input type="password" placeholder="Min 8 characters" value={form.password} onChange={e => setForm({...form, password: e.target.value})} required minLength={8} /></div>
+            <button type="submit" className="btn btn-primary btn-full" disabled={loading}>{loading ? "Creating Account..." : "Register →"}</button>
             <p className="auth-link">Already have an account? <span onClick={() => onNavigate("login")}>Sign In</span></p>
           </form>
         ) : (
           <div className="mfa-setup">
-            <div className="qr-container">
-              <img src={qrCode} alt="QR Code" className="qr-code" />
-            </div>
+            <div className="qr-container"><img src={qrCode} alt="QR Code" className="qr-code" /></div>
             <div className="mfa-steps">
               <p>1. Install <strong>Google Authenticator</strong> on your phone</p>
               <p>2. Tap + and scan the QR code above</p>
               <p>3. Enter the 6-digit code below</p>
             </div>
             <form onSubmit={handleEnableMFA} className="auth-form">
-              <div className="form-group">
-                <label>6-Digit OTP Code</label>
-                <input className="otp-input" placeholder="000000" value={otpCode}
-                  onChange={e => setOtpCode(e.target.value.replace(/\D/g,'').slice(0,6))}
-                  maxLength={6} required />
-              </div>
-              <button type="submit" className="btn btn-primary btn-full" disabled={loading || otpCode.length !== 6}>
-                {loading ? "Verifying..." : "Enable MFA & Complete Setup"}
-              </button>
+              <div className="form-group"><label>6-Digit OTP Code</label><input className="otp-input" placeholder="000000" value={otpCode} onChange={e => setOtpCode(e.target.value.replace(/\D/g,'').slice(0,6))} maxLength={6} required /></div>
+              <button type="submit" className="btn btn-primary btn-full" disabled={loading || otpCode.length !== 6}>{loading ? "Verifying..." : "Enable MFA & Complete Setup"}</button>
             </form>
           </div>
         )}
@@ -157,7 +132,6 @@ function Register({ onNavigate }) {
   );
 }
 
-// ── LOGIN PAGE ────────────────────────────────────────────────────────────────
 function Login({ onNavigate, onLogin }) {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({ email: "", password: "" });
@@ -203,34 +177,16 @@ function Login({ onNavigate, onLogin }) {
         {msg.text && <div className={`alert alert-${msg.type}`}>{msg.text}</div>}
         {step === 1 ? (
           <form onSubmit={handleCredentials} className="auth-form">
-            <div className="form-group">
-              <label>Email Address</label>
-              <input type="email" placeholder="your@email.com" value={form.email} onChange={e => setForm({...form, email: e.target.value})} required />
-            </div>
-            <div className="form-group">
-              <label>Password</label>
-              <input type="password" placeholder="Your password" value={form.password} onChange={e => setForm({...form, password: e.target.value})} required />
-            </div>
-            <button type="submit" className="btn btn-primary btn-full" disabled={loading}>
-              {loading ? "Verifying..." : "Continue →"}
-            </button>
+            <div className="form-group"><label>Email Address</label><input type="email" placeholder="your@email.com" value={form.email} onChange={e => setForm({...form, email: e.target.value})} required /></div>
+            <div className="form-group"><label>Password</label><input type="password" placeholder="Your password" value={form.password} onChange={e => setForm({...form, password: e.target.value})} required /></div>
+            <button type="submit" className="btn btn-primary btn-full" disabled={loading}>{loading ? "Verifying..." : "Continue →"}</button>
             <p className="auth-link">New voter? <span onClick={() => onNavigate("register")}>Register here</span></p>
           </form>
         ) : (
           <form onSubmit={handleMFA} className="auth-form">
-            <div className="mfa-prompt">
-              <div className="mfa-icon">🔐</div>
-              <p>Open <strong>Google Authenticator</strong> and enter the 6-digit code for BlockVote</p>
-            </div>
-            <div className="form-group">
-              <label>OTP Code</label>
-              <input className="otp-input" placeholder="000000" value={otp}
-                onChange={e => setOtp(e.target.value.replace(/\D/g,'').slice(0,6))}
-                maxLength={6} required />
-            </div>
-            <button type="submit" className="btn btn-primary btn-full" disabled={loading || otp.length !== 6}>
-              {loading ? "Verifying..." : "Verify & Login"}
-            </button>
+            <div className="mfa-prompt"><div className="mfa-icon">🔐</div><p>Open <strong>Google Authenticator</strong> and enter the 6-digit code for BlockVote</p></div>
+            <div className="form-group"><label>OTP Code</label><input className="otp-input" placeholder="000000" value={otp} onChange={e => setOtp(e.target.value.replace(/\D/g,'').slice(0,6))} maxLength={6} required /></div>
+            <button type="submit" className="btn btn-primary btn-full" disabled={loading || otp.length !== 6}>{loading ? "Verifying..." : "Verify & Login"}</button>
             <button type="button" className="btn btn-ghost btn-full" onClick={() => setStep(1)}>← Back</button>
           </form>
         )}
@@ -239,7 +195,6 @@ function Login({ onNavigate, onLogin }) {
   );
 }
 
-// ── DASHBOARD ─────────────────────────────────────────────────────────────────
 function Dashboard({ onLogout }) {
   const { user, token } = useAuth();
   const [tab, setTab] = useState("vote");
@@ -251,11 +206,15 @@ function Dashboard({ onLogout }) {
   const [verifyHash, setVerifyHash] = useState("");
   const [verifyResult, setVerifyResult] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [loadingCandidates, setLoadingCandidates] = useState(true);
   const [msg, setMsg] = useState({ type: "", text: "" });
   const [hasVoted, setHasVoted] = useState(user.hasVoted);
 
   useEffect(() => {
-    apiFetch("/candidates", {}, token).then(setCandidates).catch(console.error);
+    setLoadingCandidates(true);
+    apiFetch("/candidates", {}, token)
+      .then(data => { setCandidates(data); setLoadingCandidates(false); })
+      .catch(() => setLoadingCandidates(false));
     apiFetch("/results", {}, token).then(setResults).catch(console.error);
   }, []);
 
@@ -266,7 +225,7 @@ function Dashboard({ onLogout }) {
       const data = await apiFetch("/vote", { method: "POST", body: JSON.stringify({ candidateId: selected }) }, token);
       setVoteReceipt(data);
       setHasVoted(true);
-      setMsg({ type: "success", text: "✅ Vote cast and recorded on the blockchain!" });
+      setMsg({ type: "success", text: "Vote cast and recorded on the blockchain!" });
       const updated = await apiFetch("/results", {}, token);
       setResults(updated);
       setTimeout(() => setTab("results"), 2000);
@@ -285,10 +244,10 @@ function Dashboard({ onLogout }) {
   };
 
   const tabs = [
-    { id: "vote",       label: "Cast Vote",      icon: Icon.vote },
-    { id: "results",    label: "Live Results",   icon: Icon.chart },
-    { id: "blockchain", label: "Blockchain",     icon: Icon.chain },
-    { id: "verify",     label: "Verify Vote",    icon: Icon.search },
+    { id: "vote", label: "Cast Vote", icon: Icon.vote },
+    { id: "results", label: "Live Results", icon: Icon.chart },
+    { id: "blockchain", label: "Blockchain", icon: Icon.chain },
+    { id: "verify", label: "Verify Vote", icon: Icon.search },
   ];
 
   return (
@@ -301,7 +260,6 @@ function Dashboard({ onLogout }) {
           <button className="btn btn-ghost btn-sm" onClick={onLogout}>{Icon.logout} Logout</button>
         </div>
       </header>
-
       <nav className="dash-nav">
         {tabs.map(t => (
           <button key={t.id} className={`tab-btn ${tab === t.id ? "active" : ""}`}
@@ -310,86 +268,80 @@ function Dashboard({ onLogout }) {
           </button>
         ))}
       </nav>
-
       <main className="dash-content">
         {msg.text && <div className={`alert alert-${msg.type}`}>{msg.text}</div>}
 
-        {/* VOTE TAB */}
         {tab === "vote" && (
           <div className="vote-section">
             <div className="section-header">
               <h2>Cast Your Vote</h2>
-              <p>{hasVoted ? "You have already cast your vote in this election." : "Select a candidate and submit your ballot."}</p>
+              <p>{hasVoted ? "You have already cast your vote." : "Select a candidate and submit your ballot."}</p>
             </div>
             {hasVoted && voteReceipt && (
               <div className="receipt-card">
                 <h3>🧾 Your Vote Receipt</h3>
-                <div className="receipt-row"><span>Vote Hash:</span><code>{voteReceipt.voteHash.slice(0,40)}...</code></div>
+                <div className="receipt-row"><span>Vote Hash:</span><code>{voteReceipt.voteHash}</code></div>
                 <div className="receipt-row"><span>Block Index:</span><code>#{voteReceipt.blockIndex}</code></div>
-                <div className="receipt-row"><span>Block Hash:</span><code>{voteReceipt.blockHash.slice(0,30)}...</code></div>
-                <p className="receipt-note">⚠️ Save your Vote Hash to verify your vote on the blockchain anytime.</p>
+                <div className="receipt-row"><span>Block Hash:</span><code>{voteReceipt.blockHash}</code></div>
+                <p className="receipt-note">Save your Vote Hash to verify anytime.</p>
               </div>
             )}
-            <div className="candidates-grid">
-              {candidates.map(c => (
-                <div key={c.id}
-                  className={`candidate-card ${selected === c.id ? "selected" : ""} ${hasVoted ? "disabled" : ""}`}
-                  onClick={() => !hasVoted && setSelected(c.id)}>
-                  <div className="candidate-symbol">{c.symbol}</div>
-                  <h3>{c.name}</h3>
-                  <p>{c.party}</p>
-                  {selected === c.id && <div className="selected-mark">{Icon.check}</div>}
-                </div>
-              ))}
-            </div>
-            {!hasVoted && (
+            {loadingCandidates ? (
+              <div style={{textAlign:'center', padding:'40px', color:'var(--text2)'}}>
+                ⏳ Loading candidates... (backend may be waking up, please wait 30 seconds)
+              </div>
+            ) : (
+              <div className="candidates-grid">
+                {candidates.map(c => (
+                  <div key={c.id}
+                    className={`candidate-card ${selected === c.id ? "selected" : ""} ${hasVoted ? "disabled" : ""}`}
+                    onClick={() => !hasVoted && setSelected(c.id)}>
+                    <div className="candidate-symbol">{c.symbol}</div>
+                    <h3>{c.name}</h3>
+                    <p>{c.party}</p>
+                    {selected === c.id && <div className="selected-mark">{Icon.check}</div>}
+                  </div>
+                ))}
+              </div>
+            )}
+            {!hasVoted && !loadingCandidates && (
               <div className="vote-action">
                 <button className="btn btn-primary btn-lg" onClick={handleVote} disabled={!selected || loading}>
                   {loading ? "Processing on Blockchain..." : "Submit Ballot"}
                 </button>
-                {selected && <p className="vote-warning">⚠️ This is irreversible. Your vote will be permanently recorded on the blockchain.</p>}
+                {selected && <p className="vote-warning">This is irreversible. Your vote will be permanently recorded.</p>}
               </div>
             )}
           </div>
         )}
 
-        {/* RESULTS TAB */}
         {tab === "results" && results && (
           <div className="results-section">
             <div className="section-header">
               <h2>Live Election Results</h2>
-              <p>Total Votes: <strong>{results.totalVotes}</strong> &nbsp;|&nbsp; Chain Valid: <span className={results.chainValid ? "status-ok" : "status-err"}>{results.chainValid ? "✅ Yes" : "❌ No"}</span></p>
+              <p>Total Votes: <strong>{results.totalVotes}</strong> | Chain Valid: <span className={results.chainValid ? "status-ok" : "status-err"}>{results.chainValid ? "✅ Yes" : "❌ No"}</span></p>
             </div>
             <div className="results-list">
               {results.results.map((c, i) => (
                 <div key={c.id} className={`result-row ${i === 0 && c.votes > 0 ? "winner" : ""}`}>
                   <div className="result-rank">#{i+1}</div>
                   <div className="result-symbol">{c.symbol}</div>
-                  <div className="result-info">
-                    <strong>{c.name}</strong>
-                    <span>{c.party}</span>
-                  </div>
-                  <div className="result-bar-wrap">
-                    <div className="result-bar" style={{width: `${c.percentage}%`}}></div>
-                  </div>
-                  <div className="result-stats">
-                    <strong>{c.votes} votes</strong>
-                    <span>{c.percentage}%</span>
-                  </div>
+                  <div className="result-info"><strong>{c.name}</strong><span>{c.party}</span></div>
+                  <div className="result-bar-wrap"><div className="result-bar" style={{width:`${c.percentage}%`}}></div></div>
+                  <div className="result-stats"><strong>{c.votes} votes</strong><span>{c.percentage}%</span></div>
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* BLOCKCHAIN TAB */}
         {tab === "blockchain" && (
           <div className="blockchain-section">
             <div className="section-header">
               <h2>Blockchain Explorer</h2>
-              {blockchain && <p>{blockchain.length} Blocks &nbsp;|&nbsp; Chain Valid: <span className={blockchain.isValid ? "status-ok" : "status-err"}>{blockchain.isValid ? "✅ Valid" : "❌ Invalid"}</span></p>}
+              {blockchain && <p>{blockchain.length} Blocks | Chain Valid: <span className={blockchain.isValid ? "status-ok" : "status-err"}>{blockchain.isValid ? "✅ Valid" : "❌ Invalid"}</span></p>}
             </div>
-            {!blockchain && <p style={{color:'var(--text2)'}}>Click the Blockchain tab to load...</p>}
+            {!blockchain && <p style={{color:'var(--text2)'}}>Loading blockchain...</p>}
             <div className="blocks-list">
               {blockchain?.chain.slice().reverse().map(block => (
                 <div key={block.index} className={`block-card ${block.data.type === "GENESIS" ? "genesis" : ""}`}>
@@ -401,28 +353,22 @@ function Dashboard({ onLogout }) {
                   <div className="block-hash"><label>Hash</label><code>{block.hash}</code></div>
                   <div className="block-hash"><label>Prev Hash</label><code>{block.previousHash}</code></div>
                   <div className="block-hash"><label>Nonce</label><code>{block.nonce}</code></div>
-                  {block.data.type === "VOTE" && (
-                    <div className="block-data"><span>🗳️ Voted for: <strong>{block.data.candidateName}</strong></span></div>
-                  )}
+                  {block.data.type === "VOTE" && <div className="block-data"><span>Voted for: <strong>{block.data.candidateName}</strong></span></div>}
                 </div>
               ))}
             </div>
           </div>
         )}
 
-        {/* VERIFY TAB */}
         {tab === "verify" && (
           <div className="verify-section">
             <div className="section-header">
               <h2>Verify Your Vote</h2>
-              <p>Paste your vote hash to confirm it is recorded on the blockchain</p>
+              <p>Paste your vote hash to confirm it is on the blockchain</p>
             </div>
             <div className="verify-form">
-              <input className="verify-input" placeholder="Paste your vote hash here..."
-                value={verifyHash} onChange={e => setVerifyHash(e.target.value)} />
-              <button className="btn btn-primary" onClick={handleVerify} disabled={!verifyHash || loading}>
-                {loading ? "Searching..." : "Verify"}
-              </button>
+              <input className="verify-input" placeholder="Paste your vote hash here..." value={verifyHash} onChange={e => setVerifyHash(e.target.value)} />
+              <button className="btn btn-primary" onClick={handleVerify} disabled={!verifyHash || loading}>{loading ? "Searching..." : "Verify"}</button>
             </div>
             {verifyResult && (
               <div className={`verify-result ${verifyResult.error ? "verify-fail" : "verify-ok"}`}>
@@ -448,7 +394,6 @@ function Dashboard({ onLogout }) {
   );
 }
 
-// ── ROOT APP ──────────────────────────────────────────────────────────────────
 export default function App() {
   const [page, setPage] = useState("landing");
   const [auth, setAuth] = useState(() => {
