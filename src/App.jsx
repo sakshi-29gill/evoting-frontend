@@ -345,7 +345,7 @@ function Dashboard({ onLogout }) {
             {!hasVoted && (
               <div className="vote-action">
                 <button className="btn btn-primary btn-lg" onClick={handleVote} disabled={!selected || loading}>
-                  {loading ? "Processing on Blockchain..." : `${Icon.vote} Submit Ballot`}
+                  {loading ? "Processing on Blockchain..." : "Submit Ballot"}
                 </button>
                 {selected && <p className="vote-warning">⚠️ This is irreversible. Your vote will be permanently recorded on the blockchain.</p>}
               </div>
